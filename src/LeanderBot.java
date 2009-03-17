@@ -31,10 +31,10 @@ public class LeanderBot extends PircBot {
     private FeedFetcher fetcher;
 
     public LeanderBot() throws NickAlreadyInUseException, IOException, IrcException {
-        this.setName("rednael2");
+        this.setName("rednael");
         this.setVerbose(true);
         this.connect("irc.freenode.net");
-        channel = "#cdk-workshop";
+        channel = "#cdk";
         this.joinChannel(channel);
         queue = new ArrayList<String>();
         branch = "cdk-1.2.x";
