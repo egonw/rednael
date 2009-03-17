@@ -1,0 +1,8 @@
+IRC bot for messaging about Git commits posted via RSS
+------------------------------------------------------
+
+License: GPL
+
+Depends on ROME for RSS handling (license:P), which depends on JDOM (license:?), and on PircBot (license:GPL).
+
+
