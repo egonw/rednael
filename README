@@ -5,4 +5,19 @@ License: GPL
 
 Depends on ROME for RSS handling (license:P), which depends on JDOM (license:?), and on PircBot (license:GPL).
 
+URLs
+----
 
+http://wiki.java.net/bin/view/Javawsxml/Rome
+http://www.jdom.org/
+http://www.jibble.org/pircbot.php
+
+Compile
+-------
+
+javac -cp jar/rome-1.0.jar:jar/pircbot.jar:jar/rome-fetcher-1.0.jar src/*.java
+
+Run
+---
+
+java -cp src:jar/ant.jar:jar/jaxen-core.jar:jar/jaxen-jdom.jar:jar/jdom.jar:jar/pircbot.jar:jar/rome-1.0.jar:jar/rome-fetcher-1.0.jar:jar/saxpath.jar:jar/xalan.jar:jar/xerces.jar:jar/xml-apis.jar LeanderBot
