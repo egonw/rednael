@@ -3,6 +3,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
@@ -94,9 +95,10 @@ public class LeanderBot extends PircBot {
         LeanderBot bot = new LeanderBot();  
         bot.boot();
         
+        Random random = new Random();
         while (bot.isConnected()) {
             bot.update();
-            Thread.sleep(60000);
+            Thread.sleep(55000 + random.nextInt(10000));
         }
     }
 
