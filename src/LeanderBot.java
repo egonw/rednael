@@ -45,7 +45,7 @@ public class LeanderBot extends PircBot {
         feedInfoCache = HashMapFeedInfoCache.getInstance();
         fetcher = new HttpURLFeedFetcher(feedInfoCache);
     }
-    
+
     private void boot() throws IllegalArgumentException, IOException, FeedException, FetcherException {
         SyndFeed feed = null;
         feed = fetcher.retrieveFeed(feedURL);
@@ -60,7 +60,7 @@ public class LeanderBot extends PircBot {
         // position
         Collections.reverse(queue);
     }
-    
+
     private void update() {
         try {
             SyndFeed feed = null;
@@ -86,15 +86,15 @@ public class LeanderBot extends PircBot {
             exception.printStackTrace();
         }
     }
-    
+
     public void onMessage(String channel, String sender,
                        String login, String hostname, String message) {
     }
-    
+
     public static void main(String[] args) throws Exception {
-        LeanderBot bot = new LeanderBot();  
+        LeanderBot bot = new LeanderBot();
         bot.boot();
-        
+
         Random random = new Random();
         while (bot.isConnected()) {
             bot.update();
