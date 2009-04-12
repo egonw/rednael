@@ -18,7 +18,6 @@ package com.github.egonw.rednael;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -40,67 +39,80 @@ public class LeanderBot extends PircBot {
     /**
      * Keeps track of the latest entries.
      */
-    private List<String> queue;
-    private URL feedURL;
-    private String branch;
-    private String channel;
+    private List<Channel> channels;
+
     private FeedFetcherCache feedInfoCache;
     private FeedFetcher fetcher;
 
     public LeanderBot() throws NickAlreadyInUseException, IOException, IrcException {
-        this.setName("rednael");
+        this.setName("rednael2");
         this.setVerbose(true);
         this.connect("irc.freenode.net");
-        channel = "#cdk";
-        this.joinChannel(channel);
-        queue = new ArrayList<String>();
-        branch = "cdk-1.2.x";
-        feedURL = new URL(
+        this.channels = new ArrayList<Channel>();
+
+        Channel cdk = new Channel("#cdk");
+        String branch = "cdk-1.2.x";
+        cdk.addFeed(branch, new URL(
             "http://cdk.git.sourceforge.net/git/gitweb.cgi?p=cdk;a=rss;h=refs/heads/"
                 + branch
-        );
+        ));
+        addChannel(cdk);
+
         feedInfoCache = HashMapFeedInfoCache.getInstance();
         fetcher = new HttpURLFeedFetcher(feedInfoCache);
     }
 
+    private void addChannel(Channel channel) {
+        this.channels.add(channel);
+        this.joinChannel(channel.getName());
+    }
+
     private void boot() throws IllegalArgumentException, IOException, FeedException, FetcherException {
-        SyndFeed feed = null;
-        feed = fetcher.retrieveFeed(feedURL);
-        int itemCount = 0;
-        List<SyndEntry> entries = feed.getEntries();
-        for (SyndEntry entry : entries) {
-            itemCount++;
-            String link = entry.getLink();
-            queue.add(link);
+        for (Channel channel : channels) {
+            for (Feed chFeed : channel.getFeeds()) {
+                SyndFeed feed = null;
+                feed = fetcher.retrieveFeed(chFeed.getURL());
+                int itemCount = 0;
+                List<SyndEntry> entries = feed.getEntries();
+                for (SyndEntry entry : entries) {
+                    itemCount++;
+                    String link = entry.getLink();
+                    chFeed.add(link);
+                }
+                // feeds have the latest entry first, but we want them at the last
+                // position
+                chFeed.reverse();
+            }
         }
-        // feeds have the latest entry first, but we want them at the last
-        // position
-        Collections.reverse(queue);
     }
 
     private void update() {
-        try {
-            SyndFeed feed = null;
-            feed = fetcher.retrieveFeed(feedURL);
-            List<SyndEntry> entries = feed.getEntries();
-            for (SyndEntry entry : entries) {
-                String title = entry.getTitle();
-                String link = entry.getLink();
-                if (!queue.contains(link)) {
-                    queue.add(link);
-                    StringBuffer message = new StringBuffer();
-                    message.append('[').append(branch).append("] ");
-                    message.append(title);
-                    String author = entry.getAuthor();
-                    if (author.indexOf('<') != -1) {
-                        author = author.substring(0, author.indexOf('<'));
+        for (Channel channel : channels) {
+            for (Feed chFeed : channel.getFeeds()) {
+                try {
+                    SyndFeed feed = null;
+                    feed = fetcher.retrieveFeed(chFeed.getURL());
+                    List<SyndEntry> entries = feed.getEntries();
+                    for (SyndEntry entry : entries) {
+                        String title = entry.getTitle();
+                        String link = entry.getLink();
+                        if (!chFeed.contains(link)) {
+                            chFeed.add(link);
+                            StringBuffer message = new StringBuffer();
+                            message.append('[').append(chFeed.getLabel()).append("] ");
+                            message.append(title);
+                            String author = entry.getAuthor();
+                            if (author.indexOf('<') != -1) {
+                                author = author.substring(0, author.indexOf('<'));
+                            }
+                            message.append("  ").append(link);
+                            sendMessage(channel.getName(), message.toString());
+                        }
                     }
-                    message.append("  ").append(link);
-                    sendMessage(channel, message.toString());
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
         }
     }
 
