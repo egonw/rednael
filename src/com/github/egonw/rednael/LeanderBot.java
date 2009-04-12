@@ -56,6 +56,11 @@ public class LeanderBot extends PircBot {
             "http://cdk.git.sourceforge.net/git/gitweb.cgi?p=cdk;a=rss;h=refs/heads/"
                 + branch
         ));
+        branch = "master";
+        cdk.addFeed(branch, new URL(
+            "http://cdk.git.sourceforge.net/git/gitweb.cgi?p=cdk;a=rss;h=refs/heads/"
+                + branch
+        ));
         addChannel(cdk);
 
         feedInfoCache = HashMapFeedInfoCache.getInstance();
