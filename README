@@ -1,7 +1,8 @@
 IRC bot for messaging about Git commits posted via RSS
 ------------------------------------------------------
 
-License: GPL
+License: GNU AFFERO GENERAL PUBLIC LICENSE, Version 3
+    see: http://www.fsf.org/licensing/licenses/agpl-3.0.html
 
 Depends on ROME for RSS handling (license:P), which depends on JDOM (license:?), and on PircBot (license:GPL).
 
