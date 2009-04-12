@@ -45,7 +45,7 @@ public class LeanderBot extends PircBot {
     private FeedFetcher fetcher;
 
     public LeanderBot() throws NickAlreadyInUseException, IOException, IrcException {
-        this.setName("rednael2");
+        this.setName("rednael");
         this.setVerbose(true);
         this.connect("irc.freenode.net");
         this.channels = new ArrayList<Channel>();
