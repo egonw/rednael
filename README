@@ -16,9 +16,9 @@ http://www.jibble.org/pircbot.php
 Compile
 -------
 
-javac -cp jar/rome-1.0.jar:jar/pircbot.jar:jar/rome-fetcher-1.0.jar src/*.java
+javac -cp jar/rome-1.0.jar:jar/pircbot.jar:jar/rome-fetcher-1.0.jar src/com/github/egonw/rednael/*.java
 
 Run
 ---
 
-java -cp src:jar/ant.jar:jar/jaxen-core.jar:jar/jaxen-jdom.jar:jar/jdom.jar:jar/pircbot.jar:jar/rome-1.0.jar:jar/rome-fetcher-1.0.jar:jar/saxpath.jar:jar/xalan.jar:jar/xerces.jar:jar/xml-apis.jar LeanderBot
+java -cp src:jar/ant.jar:jar/jaxen-core.jar:jar/jaxen-jdom.jar:jar/jdom.jar:jar/pircbot.jar:jar/rome-1.0.jar:jar/rome-fetcher-1.0.jar:jar/saxpath.jar:jar/xalan.jar:jar/xerces.jar:jar/xml-apis.jar com.github.egonw.rednael.LeanderBot
