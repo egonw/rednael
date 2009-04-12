@@ -112,6 +112,7 @@ public class LeanderBot extends PircBot {
                             }
                             message.append("  ").append(link);
                             sendMessage(channel.getName(), message.toString());
+                            Thread.sleep(2000);
                         }
                     }
                 } catch (Exception exception) {
