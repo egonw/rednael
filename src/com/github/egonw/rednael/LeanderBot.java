@@ -65,6 +65,9 @@ public class LeanderBot extends PircBot {
 
         Channel bioclipse = new Channel("#bioclipse");
         bioclipse.addFeed(branch, new URL(
+            "http://github.com/feeds/egonw/commits/rednael/master"
+        ));
+        bioclipse.addFeed(branch, new URL(
             "http://pele.farmbio.uu.se/planetbioclipse/atom.xml"
         ));
         addChannel(bioclipse);
