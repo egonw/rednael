@@ -63,6 +63,12 @@ public class LeanderBot extends PircBot {
         ));
         addChannel(cdk);
 
+        Channel bioclipse = new Channel("#biolipse");
+        bioclipse.addFeed(branch, new URL(
+            "http://pele.farmbio.uu.se/planetbioclipse/atom.xml"
+        ));
+        addChannel(bioclipse);
+
         feedInfoCache = HashMapFeedInfoCache.getInstance();
         fetcher = new HttpURLFeedFetcher(feedInfoCache);
     }
