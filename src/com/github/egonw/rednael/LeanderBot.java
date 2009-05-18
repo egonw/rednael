@@ -70,6 +70,9 @@ public class LeanderBot extends PircBot {
         bioclipse.addFeed("Planet Bioclipse", new URL(
             "http://pele.farmbio.uu.se/planetbioclipse/atom.xml"
         ));
+        bioclipse.addFeed("Bioclipse Twitter", new URL(
+            "http://search.twitter.com/search.atom?q=%23bioclipse"
+        ));
         addChannel(bioclipse);
 
         feedInfoCache = HashMapFeedInfoCache.getInstance();
