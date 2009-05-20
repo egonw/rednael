@@ -16,20 +16,18 @@
 package com.github.egonw.rednael;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.LinkedList;
 
 public class Feed {
 
     private String label;
     private URL url;
-    private List<String> queue;
+    private LinkedList<String> queue;
 
     public Feed(String label, URL url) {
         this.label = label;
         this.url = url;
-        queue = new ArrayList<String>();
+        queue = new LinkedList<String>();
     }
 
     public String getLabel() {
@@ -45,11 +43,22 @@ public class Feed {
     }
 
     public void add(String link) {
-        queue.add(link);
+        System.out.println("Added link: " + link);
+        queue.addFirst(link);
+        // feeds that are smaller than what they normally should be, e.g.
+        // because they just started, will mess up... assume feeds have 50
+        // items, then the when only 8 out of 10 are given (== partial feed)
+        // , will not mess up the same. Fails for partial feeds with more than
+        // 50 items as default, but that should be rare (tm)
+        if (queue.size() > 50)
+            queue.removeLast();
     }
 
-    public void reverse() {
-        Collections.reverse(queue);
+    public void addInitial(String link) {
+        System.out.println("Added initial link: " + link);
+        // the first time a feed is read, the first item must be at the top
+        // of the list, so next is added always as last
+        queue.addLast(link);
     }
 
 }

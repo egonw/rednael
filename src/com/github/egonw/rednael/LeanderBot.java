@@ -45,7 +45,7 @@ public class LeanderBot extends PircBot {
     private FeedFetcher fetcher;
 
     public LeanderBot() throws NickAlreadyInUseException, IOException, IrcException {
-        this.setName("rednael");
+        this.setName("hadhadhadhadhadhadhadhadhad");
         this.setVerbose(true);
         this.connect("irc.freenode.net");
         this.channels = new ArrayList<Channel>();
@@ -61,6 +61,9 @@ public class LeanderBot extends PircBot {
             "http://cdk.git.sourceforge.net/git/gitweb.cgi?p=cdk;a=rss;h=refs/heads/"
                 + branch
         ));
+        cdk.addFeed("CDK Twitter", new URL(
+            "http://search.twitter.com/search.atom?q=%23cdk"
+        ));
         addChannel(cdk);
 
         Channel bioclipse = new Channel("#bioclipse");
@@ -74,6 +77,12 @@ public class LeanderBot extends PircBot {
             "http://search.twitter.com/search.atom?q=%23bioclipse"
         ));
         addChannel(bioclipse);
+
+        Channel metware = new Channel("#metware");
+        metware.addFeed("Metware Twitter", new URL(
+            "http://search.twitter.com/search.atom?q=%23metware"
+        ));
+        addChannel(metware);
 
         feedInfoCache = HashMapFeedInfoCache.getInstance();
         fetcher = new HttpURLFeedFetcher(feedInfoCache);
@@ -94,11 +103,8 @@ public class LeanderBot extends PircBot {
                 for (SyndEntry entry : entries) {
                     itemCount++;
                     String link = entry.getLink();
-                    chFeed.add(link);
+                    chFeed.addInitial(link);
                 }
-                // feeds have the latest entry first, but we want them at the last
-                // position
-                chFeed.reverse();
             }
         }
     }
@@ -108,6 +114,7 @@ public class LeanderBot extends PircBot {
             for (Feed chFeed : channel.getFeeds()) {
                 try {
                     SyndFeed feed = null;
+                    System.out.println("Feed url: " + chFeed.getURL());
                     feed = fetcher.retrieveFeed(chFeed.getURL());
                     List<SyndEntry> entries = feed.getEntries();
                     for (SyndEntry entry : entries) {
