@@ -24,6 +24,16 @@ public class Channel {
     private String name;
     private List<Feed> feeds;
 
+    private boolean activityDetected;
+
+    public boolean isActivityDetected() {
+        return activityDetected;
+    }
+
+    public void setActivityDetected(boolean activityDetected) {
+        this.activityDetected = activityDetected;
+    }
+
     public Channel(String channel) {
         this.name = channel;
         feeds = new ArrayList<Feed>();

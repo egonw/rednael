@@ -43,10 +43,10 @@ public class LeanderBot extends PircBot {
 
     private FeedFetcherCache feedInfoCache;
     private FeedFetcher fetcher;
-
+    
     public LeanderBot() throws NickAlreadyInUseException, IOException, IrcException {
 //        this.setName("hadhadhadhadhadhadhadhadhad");
-        this.setName("rednael");
+        this.setName("rednael2");
         this.setVerbose(true);
         this.connect("irc.freenode.net");
         this.channels = new ArrayList<Channel>();
@@ -112,38 +112,46 @@ public class LeanderBot extends PircBot {
 
     private void update() {
         for (Channel channel : channels) {
-            for (Feed chFeed : channel.getFeeds()) {
-                try {
-                    SyndFeed feed = null;
-                    System.out.println("Feed url: " + chFeed.getURL());
-                    feed = fetcher.retrieveFeed(chFeed.getURL());
-                    List<SyndEntry> entries = feed.getEntries();
-                    for (SyndEntry entry : entries) {
-                        String title = entry.getTitle();
-                        String link = entry.getLink();
-                        if (!chFeed.contains(link)) {
-                            chFeed.add(link);
-                            StringBuffer message = new StringBuffer();
-                            message.append('[').append(chFeed.getLabel()).append("] ");
-                            message.append(title);
-                            String author = entry.getAuthor();
-                            if (author.indexOf('<') != -1) {
-                                author = author.substring(0, author.indexOf('<'));
+            if (channel.isActivityDetected()) {
+                for (Feed chFeed : channel.getFeeds()) {
+                    try {
+                        SyndFeed feed = null;
+                        System.out.println("Feed url: " + chFeed.getURL());
+                        feed = fetcher.retrieveFeed(chFeed.getURL());
+                        List<SyndEntry> entries = feed.getEntries();
+                        for (SyndEntry entry : entries) {
+                            String title = entry.getTitle();
+                            String link = entry.getLink();
+                            if (!chFeed.contains(link)) {
+                                chFeed.add(link);
+                                StringBuffer message = new StringBuffer();
+                                message.append('[').append(chFeed.getLabel()).append("] ");
+                                message.append(title);
+                                String author = entry.getAuthor();
+                                if (author.indexOf('<') != -1) {
+                                    author = author.substring(0, author.indexOf('<'));
+                                }
+                                message.append("  ").append(link);
+                                sendMessage(channel.getName(), message.toString());
+                                Thread.sleep(2000);
                             }
-                            message.append("  ").append(link);
-                            sendMessage(channel.getName(), message.toString());
-                            Thread.sleep(2000);
                         }
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
                     }
-                } catch (Exception exception) {
-                    exception.printStackTrace();
                 }
+                channel.setActivityDetected(false);
             }
         }
     }
 
     public void onMessage(String channel, String sender,
                        String login, String hostname, String message) {
+        for (Channel ch : channels) {
+            if (ch.getName().equals(channel)) {
+                ch.setActivityDetected(true);
+            }
+        }
     }
 
     public static void main(String[] args) throws Exception {
